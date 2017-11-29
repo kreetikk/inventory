@@ -27,7 +27,7 @@ server.post('/login', (req, res) => {
     const token = new Buffer(auth.username + ':' + auth.password).toString('base64')
     res.status(200).json({ token })
   } else {
-    res.sendStatus(401)
+    res.status(401).json({ msg: 'Invalid username or password.' })
   }
 })
 
@@ -47,11 +47,11 @@ function isAuthorized (req, res, next) {
         username !== auth.username ||
         password !== auth.password) {
         res.set('WWW-Authenticate', 'Basic realm="nope"') // change this
-        res.status(401).send('You shall not pass.') // custom message
+        res.status(403).json({ msg: 'Invalid authorization token.' })
         return
       }
     next()
   } else {
-    res.sendStatus(401)
+    res.status(401).json({ msg: 'No authorization token found.' })
   }
 }
