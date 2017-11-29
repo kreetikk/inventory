@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Bheetri Inventory</title>
+  <meta name="description" id="description" content="">
+  <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="icon.png">
+  <link href='style/main.css' rel='stylesheet'>
+</head>
+
+<body>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+  <div class="title"><h1>Inventory</h1></div>
+  <div id="login" class="container">
+    <h2>Login:</h2>
+    <form id="loginForm">
+      <div class="group">
+        <input id="username" type="text" style="text-transform: lowercase;" placeholder="Username" required />
+        <label for="username">Username</label>
+      </div>
+      <div class="group">
+        <input id="password" type="password" placeholder="Password" required />
+        <label for="password">Password</label>
+      </div>
+      <input type="submit" value="Login" />
+    </form>
+  </div>
+
+  <div id="addType" class="container">
+    <form id="typeForm">
+      <h2><span id="addEditTitle">Add</span> type:</h2>
+      <div class="group">
+        <input name="name" id="typeName" name="text" placeholder="Name" required />
+        <label for="typeName">Name</label>
+      </div>
+      <input type="submit" value="Add" /><input id="cancelTypeBtn" type="reset" value="Cancel" />
+    </form>
+  </div>
+
+  <div id="addEditItem" class="container">
+    <form id="itemForm">
+      <h2><span id="addEditTitle">Add</span> item:</h2>
+      <input name="id" id="id" type="hidden" required />
+      <div class="group">
+        <input name="sku" id="sku" type="text" placeholder="SKU" required />
+        <label for="sku">SKU</label>
+      </div>
+      <div class="group">
+        <input name="name" id="name" type="text" placeholder="Name" required />
+        <label for="name">Name</label>
+      </div>
+      <div class="group">
+        <select name="typeId" id="typeId" required></select>
+        <label for="typeId">Type</label>
+      </div>
+      <div class="group">
+        <input name="description" id="description" type="text" placeholder="Description" required />
+        <label for="description">Description</label>
+      </div>
+      <div class="group">
+        <input name="buyingPrice" id="buyingPrice" type="number" placeholder="Bying Price" required />
+        <label for="buyingPrice">Bying Price</label>
+      </div>
+      <div class="group">
+        <input name="sellingPrice" id="sellingPrice" type="number" placeholder="Selling Price" required />
+        <label for="sellingPrice">Selling Price</label>
+      </div>
+      <input id="addEditItemBtn" type="submit" value="Add" /><input id="cancelItemBtn" type="reset" value="Cancel" />
+    </form>
+  </div>
+  <div id="addStock" class="container">
+    <form id="stockForm">
+      <h2><span id="addEditTitle">Add</span> stock:</h2>
+      <div class="group">
+        <select name="itemId" id="itemId" required></select>
+        <label for="itemId">Item</label>
+      </div>
+      <div class="group">
+        <input name="size" id="size" type="text" placeholder="Size" required />
+        <label for="size">Size</label>
+      </div>
+      <div class="group">
+        <input name="count" id="count" type="number" placeholder="Count" required />
+        <label for="count">Count</label>
+      </div>
+      <input id="addStockBtn" type="submit" value="Add" /><input id="cancelStockBtn" type="reset" value="Cancel" />
+    </form>
+  </div>
+  <div id="sellItem" class="container">
+    <form id="sellForm">
+      <h2>Sell item:</h2>
+      <div class="group">
+        <input name="item" id="itemSell" type="text" placeholder="Item" disabled required />
+        <label for="itemSell">Item</label>
+      </div>
+      <div class="group">
+        <select name="size" id="sizeSell" required></select>
+        <label for="size">size</label>
+      </div>
+      <div class="group">
+        <input name="count" id="sellCount" type="number" placeholder="Count" max="0" required />
+        <label for="sellCount">Count</label>
+      </div>
+      <div class="group">
+        <input name="price" id="sellPrice" type="number" placeholder="Unit Price" required />
+        <label for="sellprice">Unit Price</label>
+      </div>
+      <div class="group">
+        <textarea name="comments" id="sellComments" placeholder="Comments" required></textarea>
+        <label for="sellComments">Comments</label>
+      </div>
+      <input type="submit" value="Sell" /><input id="cancelSellBtn" type="reset" value="Cancel" />
+    </form>
+  </div>
+  <div id="items" class="items">
+    Loading...
+  </div>
+  <button id="addTypeBtn" class="fab type tooltip" title="Add a type">+</button>
+  <button id="addItemBtn" class="fab item tooltip" title="Add an item">+</button>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
