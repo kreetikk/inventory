@@ -3,8 +3,8 @@
 
   var $ = s => document.querySelector(s)
   var $$ = s => document.querySelectorAll(s)
-  var show = el => { if (el) el.style.display = 'block' }
-  var hide = el => { if (el) el.style.display = 'none' }
+  var show = el => { if (el) el.classList.remove('hidden')}
+  var hide = el => { if (el) el.classList.add('hidden') }
 
   var apiURL = location.origin
   var token = localStorage.getItem('token')
@@ -60,7 +60,7 @@
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: $('#username').value.toLowerCase(),
+        login: $('#username').value.toLowerCase(),
         password: $('#password').value
       })
     })
@@ -111,7 +111,7 @@
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': token
+        'Authorization': 'Basic ' + token
       },
       body: JSON.stringify({
         name: $('#typeName').value,
@@ -146,7 +146,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'Basic ' + token
         },
         body: JSON.stringify(data)
       })
@@ -164,7 +164,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'Basic ' + token
         },
         body: JSON.stringify(data)
       })
@@ -197,7 +197,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'Basic ' + token
         },
         body: JSON.stringify(data)
       })
@@ -212,7 +212,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'Basic ' + token
         },
         body: JSON.stringify(data)
       })
@@ -236,7 +236,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'Basic ' + token
         },
         body: JSON.stringify({ count: count - sellCount })
       })
@@ -248,7 +248,7 @@
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': 'Basic ' + token
           },
           body: JSON.stringify({
             itemId: $itemSell.dataset.itemid,
@@ -363,7 +363,7 @@
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': token
+        'Authorization': 'Basic ' + token
       }
     })
     .then(res => res.json())
@@ -411,7 +411,7 @@
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': token
+        'Authorization': 'Basic ' + token
       }
     }
     fetch(apiURL + '/api/stocks', getHeaders)

@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
 const auth = {
-  username: process.env.USERNAME || 'test',
+  login: process.env.LOGIN || 'test',
   password: process.env.PASSWORD || 'test'
 }
 
@@ -20,14 +20,14 @@ server.use(bodyParser.json())
 
 server.post('/login', (req, res) => {
   if (
-    req.body && req.body.username && req.body.password &&
-    req.body.username === auth.username &&
+    req.body && req.body.login && req.body.password &&
+    req.body.login === auth.login &&
     req.body.password === auth.password
   ) {
-    const token = new Buffer(auth.username + ':' + auth.password).toString('base64')
+    const token = new Buffer(auth.login + ':' + auth.password).toString('base64')
     res.status(200).json({ token })
   } else {
-    res.status(401).json({ msg: 'Invalid username or password.' })
+    res.status(401).json({ msg: 'Invalid login or password.' })
   }
 })
 
@@ -40,11 +40,11 @@ server.listen(3000, () => {
 function isAuthorized (req, res, next) {
   if (req.headers.authorization) {    
       const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-      const [username, password] = new Buffer(b64auth, 'base64').toString().split(':')
+      const [login, password] = new Buffer(b64auth, 'base64').toString().split(':')
     
-      // Verify username and password are set and correct
-      if (!username || !password ||
-        username !== auth.username ||
+      // Verify login and password are set and correct
+      if (!login || !password ||
+        login !== auth.login ||
         password !== auth.password) {
         res.set('WWW-Authenticate', 'Basic realm="nope"') // change this
         res.status(403).json({ msg: 'Invalid authorization token.' })
