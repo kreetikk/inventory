@@ -348,6 +348,7 @@
     hide($addType)
     $addEditTitle.innerText = $addEditItemBtn.value = 'Add'
     $itemForm.reset()
+    $('#id').value = ''
     $stockForm.reset()
     $sellForm.reset()
     $typeForm.reset()
