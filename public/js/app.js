@@ -64,6 +64,7 @@
         password: $('#password').value
       })
     })
+    .then(errorHandler)
     .then(res => res.json())
     .then(json => {
       token = json.token
@@ -118,6 +119,7 @@
         createdDate: new Date().toISOString()
       })
     })
+    .then(errorHandler)
     .then(res => res.json())
     .then(json => {
       fetchTypes()
@@ -150,6 +152,7 @@
         },
         body: JSON.stringify(data)
       })
+      .then(errorHandler)
       .then(res => res.json())
       .then(json => {
         resetForm()
@@ -168,6 +171,7 @@
         },
         body: JSON.stringify(data)
       })
+      .then(errorHandler)
       .then(res => res.json())
       .then(json => {
         fetchItems()
@@ -201,6 +205,7 @@
         },
         body: JSON.stringify(data)
       })
+      .then(errorHandler)
       .then(res => res.json())
         .then(json => {
           fetchItems()
@@ -216,6 +221,7 @@
         },
         body: JSON.stringify(data)
       })
+      .then(errorHandler)
       .then(res => res.json())
       .then(json => {
         fetchItems()
@@ -240,6 +246,7 @@
         },
         body: JSON.stringify({ count: count - sellCount })
       })
+      .then(errorHandler)
       .then(res => res.json())
       .then(json => {
         fetchItems()
@@ -258,6 +265,7 @@
             createdDate: new Date().toISOString()
           })
         })
+        .then(errorHandler)
         .then(res => console.log(res.ok))
         .catch(console.error)
 
@@ -367,6 +375,7 @@
         'Authorization': 'Basic ' + token
       }
     })
+    .then(errorHandler)
     .then(res => res.json())
     .then(json => {
       if (!json.length) {
@@ -383,6 +392,8 @@
     .catch(err => {
       console.error(err)
       show($login)
+      hide($addTypeBtn)
+      hide($addItemBtn)
       hide($items)
     })
   }
@@ -416,51 +427,60 @@
       }
     }
     fetch(apiURL + '/api/stocks', getHeaders)
-      .then(res => res.json())
-      .then(data => {
-        stocks = data
-        fetch(apiURL + '/api/items', getHeaders)
-          .then(res => res.json())
-          .then(data => {
-            items = data
-            if (!items.length) {
-              $items.innerHTML = 'Click on the (+) button to add a new items.'
-              return
-            }
-            bindItems()
-            items.map(item => {
-              var base64Item = btoa(JSON.stringify(item))
-              var sizeRow = '<div class="table small"><div class="table-row"><div class="table-col">S</div>'
-              var countRow = '<div class="table-row"><div class="table-col">C</div>'
-              var count = 0
-              stocks.map(s => {
-                if (s.itemId === item.id + '' && +s.count) {
-                  sizeRow += '<div class="table-col">' + s.size + '</div>'
-                  countRow += '<div class="table-col">' + s.count + '</div>'
-                  count += +s.count
-                }
-              })
-              sizeRow += '<input id="showAddStockBtn" type="button" data-itemid="' + item.id + '" class="tiny" value="+" /></div>'
-              countRow += '<strong class="total">' + count + '</strong></div></div>'
-              itemsTable += '<tr>' +
-                '<td data-th="SKU">' + item.sku + '</td>' +
-                '<td data-th="Name">' + item.name + '</td>' +
-                '<td data-th="Type">' + (types.filter(t => t.id + '' === item.typeId))[0].name + '</td>' +
-                '<td data-th="Description">' + item.description + '</td>' +
-                '<td data-th="Stock">' + sizeRow + countRow + '</td>' +
-                '<td data-th="Buying">Rs. ' + item.buyingPrice + '</td>' +
-                '<td data-th="Selling">Rs. ' + item.sellingPrice + '</td>' +
-                '<td style="display: flex;" data-th="Actions"><input id="sellBtn" class="small" type="button" data-item="' + base64Item + '" value="Sell" />' +
-                '<input id="editBtn" class="small" type="button" data-item="' + base64Item + '" value="Edit" /></td>' +
-                '</tr>'
+    .then(errorHandler)
+    .then(res => res.json())
+    .then(data => {
+      stocks = data
+      fetch(apiURL + '/api/items', getHeaders)
+      .then(errorHandler)
+        .then(res => res.json())
+        .then(data => {
+          items = data
+          if (!items.length) {
+            $items.innerHTML = 'Click on the (+) button to add a new items.'
+            return
+          }
+          bindItems()
+          items.map(item => {
+            var base64Item = btoa(JSON.stringify(item))
+            var sizeRow = '<div class="table small"><div class="table-row"><div class="table-col">S</div>'
+            var countRow = '<div class="table-row"><div class="table-col">C</div>'
+            var count = 0
+            stocks.map(s => {
+              if (s.itemId === item.id + '' && +s.count) {
+                sizeRow += '<div class="table-col">' + s.size + '</div>'
+                countRow += '<div class="table-col">' + s.count + '</div>'
+                count += +s.count
+              }
             })
-            $items.innerHTML = itemsTable + '</table>'
+            sizeRow += '<input id="showAddStockBtn" type="button" data-itemid="' + item.id + '" class="tiny" value="+" /></div>'
+            countRow += '<strong class="total">' + count + '</strong></div></div>'
+            itemsTable += '<tr>' +
+              '<td data-th="SKU">' + item.sku + '</td>' +
+              '<td data-th="Name">' + item.name + '</td>' +
+              '<td data-th="Type">' + (types.filter(t => t.id + '' === item.typeId))[0].name + '</td>' +
+              '<td data-th="Description">' + item.description + '</td>' +
+              '<td data-th="Stock">' + sizeRow + countRow + '</td>' +
+              '<td data-th="Buying">Rs. ' + item.buyingPrice + '</td>' +
+              '<td data-th="Selling">Rs. ' + item.sellingPrice + '</td>' +
+              '<td style="display: flex;" data-th="Actions"><input id="sellBtn" class="small" type="button" data-item="' + base64Item + '" value="Sell" />' +
+              '<input id="editBtn" class="small" type="button" data-item="' + base64Item + '" value="Edit" /></td>' +
+              '</tr>'
           })
-        .catch(err => {
-          console.error(err)
-          hide($login)
+          $items.innerHTML = itemsTable + '</table>'
         })
+      .catch(err => {
+        console.error(err)
+        hide($login)
       })
-      .catch(console.error)
+    })
+    .catch(console.error)
+  }
+
+  function errorHandler (res) {
+    if (res.ok) return res
+    
+    console.error(res)
+    localStorage.clear()
   }
 })()
