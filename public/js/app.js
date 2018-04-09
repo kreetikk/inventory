@@ -51,6 +51,7 @@
     show($login)
     hide($addTypeBtn)
     hide($addItemBtn)
+    hide($('#typeFilter'))
   }
 
   $('#loginForm').addEventListener('submit', function (e) {
