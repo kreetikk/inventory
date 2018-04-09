@@ -33,6 +33,9 @@
   var $typeForm = $('#typeForm')
   var $addTypeBtn = $('#addTypeBtn')
   var $stockSize = $('#size')
+  var $drpType = $('#drpType')
+
+  if (!NodeList.prototype.map) NodeList.prototype.map = Array.prototype.map;
 
   hide($addEditItem)
   hide($items)
@@ -53,14 +56,14 @@
   $('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault()
 
-    fetch(apiURL + '/login', {
+    fetch(apiURL + '/auth/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        login: $('#username').value.toLowerCase(),
+        email: $('#username').value.toLowerCase(),
         password: $('#password').value
       })
     })
@@ -112,7 +115,7 @@
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({
         name: $('#typeName').value,
@@ -148,7 +151,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
       })
@@ -167,7 +170,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
       })
@@ -201,7 +204,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
       })
@@ -217,7 +220,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
       })
@@ -242,7 +245,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({ count: count - sellCount })
       })
@@ -255,7 +258,7 @@
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + token
+            'Authorization': 'Bearer ' + token
           },
           body: JSON.stringify({
             itemId: $itemSell.dataset.itemid,
@@ -323,6 +326,21 @@
     }
   })
 
+  $drpType.addEventListener('change', function (e) {
+    var typeIndex
+    var type = e.target.options[e.target.selectedIndex].textContent
+
+    $$('th').map(function (th, i) {
+      if (th.textContent.trim() === 'Type') typeIndex = i
+    })
+
+    $$('tr').map(function (tr, i) {
+      if (i > 0) {
+        var isShow = type === 'All' || tr.children[typeIndex].textContent === type
+        tr.style.display = isShow ? 'table-row' : 'none'
+      }
+    })
+  })
 
   var lastScrollTop = 0
   window.addEventListener("scroll", () => {
@@ -372,7 +390,7 @@
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Basic ' + token
+        'Authorization': 'Bearer ' + token
       }
     })
     .then(errorHandler)
@@ -384,7 +402,7 @@
         hide($addTypeBtn)
         hide($items)
       } else {
-        types = json
+        types = json.sort(function (a, b) { return a.name > b.name })
         hide($addType)
         bindTypes()
       }
@@ -404,6 +422,7 @@
       options += '<option value="' + types[key].id + '">' + types[key].name + '</option>'
     })
     $typeId.innerHTML = options
+    $drpType.innerHTML += options
     $typeId.value = 1
   }
 
@@ -423,7 +442,7 @@
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Basic ' + token
+        'Authorization': 'Bearer ' + token
       }
     }
     fetch(apiURL + '/api/stocks', getHeaders)
