@@ -34,6 +34,7 @@
   var $addTypeBtn = $('#addTypeBtn')
   var $stockSize = $('#size')
   var $drpType = $('#drpType')
+  var $typeFilter = $('#typeFilter')
 
   if (!NodeList.prototype.map) NodeList.prototype.map = Array.prototype.map;
 
@@ -51,7 +52,7 @@
     show($login)
     hide($addTypeBtn)
     hide($addItemBtn)
-    hide($('#typeFilter'))
+    hide($typeFilter)
   }
 
   $('#loginForm').addEventListener('submit', function (e) {
@@ -78,6 +79,7 @@
       hide($login)
       show($addTypeBtn)
       show($addItemBtn)
+      show($typeFilter)
     })
     .catch(console.error)
   })
