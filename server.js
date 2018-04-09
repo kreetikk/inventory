@@ -11,18 +11,10 @@ const userDb = JSON.parse(fs.readFileSync('../usersDB.json', 'UTF-8'))
 const SECRET_KEY = process.env.LOGIN || 'very secret thing'
 const expiresIn = process.env.LOGIN || '24h'
 
-const auth = {
-  login: process.env.LOGIN || 'test',
-  password: process.env.PASSWORD || 'test'
-}
-
 const server = jsonServer.create()
 const router = jsonServer.router('../inventoryDB.json')
-const middlewares = jsonServer.defaults({
-  static: path.join(process.cwd(), 'public/')
-})
 
-server.use(middlewares)
+server.use(jsonServer.defaults({ static: path.join(process.cwd(), 'public/') }))
 server.use(cookieParser())
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: true }))
