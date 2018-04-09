@@ -8,8 +8,8 @@ const bcrypt = require('bcryptjs')
 
 const userDb = JSON.parse(fs.readFileSync('../usersDB.json', 'UTF-8'))
 
-const SECRET_KEY = process.env.LOGIN || 'very secret thing'
-const expiresIn = process.env.LOGIN || '24h'
+const SECRET_KEY = process.env.SECRET_KEY || 'very secret thing'
+const expiresIn = process.env.EXPIRES_IN || '24h'
 
 const server = jsonServer.create()
 const router = jsonServer.router('../inventoryDB.json')
